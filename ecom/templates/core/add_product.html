@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .login-box {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .textbox {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .textbox input {
+            width: 100%;
+            padding: 10px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid #333;
+            outline: none;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .textbox label {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            color: #333;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .textbox input:focus + label,
+        .textbox input:valid + label {
+            top: -5px;
+            left: 0;
+            color: #009970;
+            font-size: 12px;
+        }
+
+        .btn {
+            width: 100%;
+            background-color: #009970;
+            border: none;
+            padding: 10px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #008060;
+        }
+
+        .extra {
+            margin-top: 20px;
+        }
+
+        .extra a {
+            color: #009970;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: 0.3s;
+        }
+
+        .extra a:hover {
+            color: #008060;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Commercial Website</title>
+    <link rel="stylesheet" href="log.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Add Product</h2>
+            
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            
+            <form method="post" enctype="multipart/form-data" id="product-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn" id="submit-btn">Add Product</button>
+            </form>
+            
+            {% if form.instance.pk and form.instance.image %}
+            <h2>Current Image:</h2>
+            <img src="{{ form.instance.image.url }}" alt="{{ form.instance.name }}">
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        // Example in JavaScript
+        console.log(products);  // Ensure the products array has no duplicates
+        products.forEach(product => {
+            console.log(product);
+            // Render product
+        });
+        </script>
+        
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Add Product</title>
+</head>
+<body>
+    <h1>Add Product</h1>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Product</button>
+    </form>
+</body>
+</html> -->
+
