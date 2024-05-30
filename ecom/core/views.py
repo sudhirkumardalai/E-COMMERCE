@@ -9,6 +9,9 @@ from .models import CheckoutAddress
 from .forms import CheckoutForm
 from django.conf import settings
 import razorpay
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from core.models import Order, CheckoutAddress 
 razorpay_client =razorpay.Client(auth=(settings.RAZORPAY_ID,settings.RAZORPAY_SECRET))
 
 
@@ -201,6 +204,34 @@ def payment(request):
     except Order.DoesNotExist:
         print("order not found")
         return HttpResponse("404 Error")
+
+def render_pdf_view(request):
+    order_db = Order.objects.get(razorpay_order_id=order_id)
+    checkoutAddress = CheckoutAddress.objects.get(user=request.user)
+    payment_id = order_db.razorpay_payment_id
+    amount= order_db.get_total_price()
+    amount=amount * 100
+    payment_status = razorpay_client.payment.capture(payment_id,amount)
+    
+    template_path = 'invoice/invoice.html'
+    context = {"order":order_db,"payment_status":payment_status,"checkout_address":checkoutAddress}
+        
+    
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response, link_callback=link_callback)
+    # if error then show some funny view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+    
 @csrf_exempt    
 def handlerequest(request):
     if request.method == "POST":
@@ -235,36 +266,13 @@ def handlerequest(request):
                     order_db.ordered = True
                     order_db.save()
                     print("payment success")
-                    # try:
-                    #     subject ="payment successfully received"
-                    #     message = f"Hi {request.user.username}, your order is successfully placed"
-                    #     message_for_dipu= f"Hi dipu, you have received your order from us"
-                    #     email_from = settings.EMAIL_HOST_USER
-                    #     recipient_list=[
-                    #         request.user.email,
-                    #     ]
-                    #     send_mail(subject,message,email_from,recipient_list)
-                    #     send_mail(
-                    #         "Order Alert!!", message_for_dipu,email_from,email_from,
-                    #     )
-                    # except Exception as e:
-                    #     pass
+                    checkoutAddress = CheckoutAddress.objects.get(user=request.user)
                     request.sesssion[
                         "order_complete"
                     ]= "Your order is successfully placed, you will receive your order within 3 daays"
-                    return render(request,"core/invoice.html")
+                    return redirect('render_pdf_view')
                 else:
-                    print("Payment failed")    
-                    # try:
-                    #     subject= "payment failed!"
-                    #     message = f"Hi{request.user.username}, Unfortunately your order could not placed"
-                    #     email_from = settings.EMAIL_HOST_USER
-                    #     recipient_list = [
-                    #         request.user.email,
-                    #     ]
-                    #     send_mail(subject,message,email_from,recipient_list)
-                    # except Exception as e:
-                    #     pass
+                    print("Payment failed")   
 
                     order_db.ordered = False
                     order_db.save()

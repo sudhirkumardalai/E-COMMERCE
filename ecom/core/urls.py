@@ -13,6 +13,7 @@ urlpatterns = [
     path('checkout_page',checkout_page,name="checkout_page"),
     path('payment',views.payment,name="payment"),
     path('handlerequest',views.handlerequest,name="handlerequest"),
+    path('render_pdf_view',views.render_pdf_view,name="render_pdf_view"),
 ]
 
 

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header, .footer {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .header p {
+            margin: 5px 0;
+        }
+        .invoice-details, .customer-details, .order-summary {
+            margin-bottom: 20px;
+        }
+        .invoice-details table, .customer-details table, .order-summary table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .invoice-details th, .customer-details th, .order-summary th,
+        .invoice-details td, .customer-details td, .order-summary td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .invoice-details th, .customer-details th, .order-summary th {
+            background-color: #f2f2f2;
+        }
+        .order-summary table {
+            margin-top: 20px;
+        }
+        .order-summary td {
+            text-align: right;
+        }
+        .order-summary .item {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Invoice</h1>
+            <p>Thank you for your purchase!</p>
+        </div>
+        
+        <div class="invoice-details">
+            <table>
+                <tr>
+                    <th>Invoice Number:</th>
+                    <td>{{payment_status.order_id}}</td>
+                </tr>
+                <tr>
+                    <th>Invoice Date:</th>
+                    <td>{{order.ordered_date}}</td>
+                </tr>
+                <tr>
+                    <th>Payment Method:</th>
+                    <td>{{payment_status.method}}</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="customer-details">
+            <table>
+                <tr>
+                    <th>Customer Name:</th>
+                    <td>John Doe</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td>johndoe@example.com</td>
+                </tr>
+                <tr>
+                    <th>Address:</th>
+                    <td> BHADRAK, Odisha <br>{{checkout_address.street_address}} {{checkout_address.apartment_address}}<br>{{checkout_address.country}} {{checkout_address.zip_code}}<br>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <table>
+                <tr>
+                    <th class="item">Item</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    
+                </tr>
+                {% for item in order.items.all %}
+                <tr>
+                    <td class="item">{{item.Product.name}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.get_total_item_price}}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="2" style="text-align: right;"><strong>Total:</strong></td>
+                    <td>Rs. {{order.get_total_price}}</td>
+                </tr>
+
+                <!-- <tr>
+                    <td class="item">Product Name 2</td>
+                    <td>1</td>
+                    <td>$75.00</td>
+                    <td>$75.00</td>
+                </tr> -->
+              
+                </tr>
+                
+             
+                </tr>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <p>SD stores</p>
+            <p>Chhatabar market , Bhadrak, 756122</p>
+            <p>Email: support@sdstores.com | Phone: (91+) 7735646723 </p>
+        </div>
+    </div>
+    <div style="text-align: center"><button>print</button></div>
+</body>
+
+<script>
+    document.queryselector("button").addEventListner("click",function(){window.print(); })
+</script>
+</html>
