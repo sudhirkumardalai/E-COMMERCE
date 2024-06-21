@@ -55,7 +55,7 @@ PDF Invoice:
 After successful payment, generate and download the order invoice in PDF format.
 
 ### Project Structure:
-ecommerce-website/
+ecom/
 ├── core/
 │   ├── migrations/
 │   ├── templates/
@@ -84,7 +84,7 @@ ecommerce-website/
 │   ├── __init__.py
 │   ├── views.py
 │   ├── urls.py
-├── ecommerce_website/
+├── ecom/
 │   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
