@@ -54,8 +54,7 @@ Proceed to checkout, enter payment details, and place the order.
 PDF Invoice:
 After successful payment, generate and download the order invoice in PDF format.
 
-Project Structure
-plaintext
+### Project Structure:
 ecommerce-website/
 ├── core/
 │   ├── migrations/
@@ -77,6 +76,14 @@ ecommerce-website/
 │   ├── tests.py
 │   ├── urls.py
 │   └── views.py
+├── accounts/
+│   ├── templates/
+│   │   ├── account/
+│   │   │   ├── login.html
+│   │   │   ├── register.html
+│   ├── __init__.py
+│   ├── views.py
+│   ├── urls.py
 ├── ecommerce_website/
 │   ├── __init__.py
 │   ├── settings.py
